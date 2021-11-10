@@ -1,12 +1,12 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, FirstPersonControls, PointerLockControls, Image, Box as NativeBox, useTexture, Plane, PerspectiveCamera } from '@react-three/drei'
+import { OrbitControls, FirstPersonControls, PointerLockControls, Image, Box as NativeBox, useTexture, Plane, PerspectiveCamera, Sky } from '@react-three/drei'
 
 import * as THREE from 'three'
 import Art from './Art'
 import RoomSegment from './RoomSegment'
 import { Suspense, useState, useEffect, useRef } from 'react'
 
-export default function Gallery() {
+export default function Gallery({handleLock}) {
 
   const [moveForward, setMoveForward] = useState(false)
   const [moveBackward, setMoveBackward] = useState(false)
@@ -25,17 +25,32 @@ export default function Gallery() {
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5322.JPG'},
+    {url: '/IMG_5323.JPG'},
+    {url: '/IMG_5324.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5322.JPG'},
+    {url: '/IMG_5323.JPG'},
+    {url: '/IMG_5324.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5322.JPG'},
+    {url: '/IMG_5323.JPG'},
+    {url: '/IMG_5324.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5322.JPG'},
+    {url: '/IMG_5323.JPG'},
+    {url: '/IMG_5324.JPG'},
     {url: '/IMG_5325.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+
+    
   ]
 
   const roomSize = 6
@@ -48,6 +63,15 @@ export default function Gallery() {
 
 
   useFrame((state, delta) => {
+
+    // controls.current.addEventListener('lock', () => {
+    //   console.log('lock');
+    //   handleLock(true)
+    // });
+    // controls.current.addEventListener('unlock', () => {
+    //   console.log('unlock')
+    //   handleLock(false);
+    // });
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
@@ -140,6 +164,8 @@ export default function Gallery() {
 
   return (
     <>
+      <Sky distance={450000} sunPosition={[0.45, 0.5, 0.45]} inclination={0} azimuth={0.75} />
+
       <ambientLight intensity={2} />
       <pointLight position={[40, 40, 40]} />
       {/* <NativeBox
@@ -152,7 +178,7 @@ export default function Gallery() {
           />
       </NativeBox> */}
 
-      <Plane position={[0,-12.5,0]} rotation={[-Math.PI / 2,0,0]} args={[500, 500, 1, 1]}>
+      <Plane position={[0,-12.5,0]} rotation={[-Math.PI / 2,0,0]} args={[2000, 2000, 1, 1]}>
         <meshStandardMaterial
             attach="material"
             color={'#666'}
@@ -172,7 +198,8 @@ export default function Gallery() {
               <Art key={idx} number={idx} url={item.url}/>
           ))}
       </Suspense> */}
-      <PointerLockControls ref={controls} />
+      <PointerLockControls
+           ref={controls} />
       {/* <OrbitControls  /> */}
     </>
   )

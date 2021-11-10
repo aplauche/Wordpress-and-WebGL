@@ -1,30 +1,26 @@
 
 import {  Image, Box as NativeBox} from '@react-three/drei'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import * as THREE from 'three'
 
 
 
 export default ({url, number, vectors}) => {
 
-    const rotate = null;
 
-    if(number == 0){
-        rotate=[0, - Math.PI / 2 , 0]
-    } else {
-        rotate = [0,0,0]
-    }
+    const [hover, setHover] = useState(false)
 
     return(
         <group rotation={vectors.rotation} position={vectors.position}>
             <NativeBox
             args={[12, 12, 2]}
-            
+            onClick={()=> setHover(true)}
+            onMouseOut={()=> setHover(false)}
             >
-            <meshStandardMaterial
-                attach="material"
-                color={'white'}
-            />
+                <meshStandardMaterial
+                    attach="material"
+                    color={hover ? 'white' : '#999'}
+                />
             </NativeBox>
             <Image  scale={[10,10,1]} position={[0,0,1.1]} url={url} />
         </group>
