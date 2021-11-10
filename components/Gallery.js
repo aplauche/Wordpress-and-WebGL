@@ -3,6 +3,7 @@ import { OrbitControls, FirstPersonControls, PointerLockControls, Image, Box as 
 
 import * as THREE from 'three'
 import Art from './Art'
+import RoomSegment from './RoomSegment'
 import { Suspense, useState, useEffect, useRef } from 'react'
 
 export default function Gallery() {
@@ -22,7 +23,29 @@ export default function Gallery() {
     {url: '/IMG_5323.JPG'},
     {url: '/IMG_5324.JPG'},
     {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
+    {url: '/IMG_5325.JPG'},
   ]
+
+  const roomSize = 6
+
+  const rooms = []
+
+  for (let i = 0; i < pictures.length; i += roomSize){
+    rooms.push(pictures.slice(i, i + roomSize));
+  }
+
 
   useFrame((state, delta) => {
 
@@ -44,9 +67,10 @@ export default function Gallery() {
         cameraDirection.applyMatrix4(rotationMatrix);
       }
       rayCaster = new THREE.Raycaster(controls.current.getObject().position, cameraDirection); 
-      const intersects = rayCaster.intersectObjects( state.scene.children );
-  
+      const intersects = rayCaster.intersectObjects( state.scene.children, true );
+      // console.log(intersects);
       if(intersects.length == 0 || intersects[0].distance > 10){
+        
         velocity[movementAxis] -= direction[movementAxis] * 400.0 * delta;
       }
     }
@@ -118,22 +142,38 @@ export default function Gallery() {
     <>
       <ambientLight intensity={2} />
       <pointLight position={[40, 40, 40]} />
-      <NativeBox
-          args={[100, 25, 5]}
-          position={[40,0,0]}
+      {/* <NativeBox
+          args={[100, 20, 4]}
+          position={[0,0,0]}
           >
           <meshStandardMaterial
               attach="material"
               color={'#2b6c76'}
           />
-      </NativeBox>
+      </NativeBox> */}
 
-      <Suspense fallback={null}>
+      <Plane position={[0,-12.5,0]} rotation={[-Math.PI / 2,0,0]} args={[500, 500, 1, 1]}>
+        <meshStandardMaterial
+            attach="material"
+            color={'#666'}
+        />
+      </Plane>
+
+
+      {rooms.map((room, idx) => (
+        <RoomSegment pictures={room} number={idx}/>
+      ))}
+
+      
+      
+
+      {/* <Suspense fallback={null}>
           {pictures.map((item, idx) =>(
               <Art key={idx} number={idx} url={item.url}/>
           ))}
-      </Suspense>
+      </Suspense> */}
       <PointerLockControls ref={controls} />
+      {/* <OrbitControls  /> */}
     </>
   )
 }

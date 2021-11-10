@@ -5,7 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 export default function IndexPage() {
 
   return (
-    <Canvas>
+    <Canvas camera={{position: [0, 0, 0], rotation: [0, Math.PI, 0]}} >
       <Gallery />
     </Canvas>
   )
