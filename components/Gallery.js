@@ -6,7 +6,7 @@ import Art from './Art'
 import RoomSegment from './RoomSegment'
 import { Suspense, useState, useEffect, useRef } from 'react'
 
-export default function Gallery({handleLock}) {
+export default function Gallery({updateLocked}) {
 
   const [moveForward, setMoveForward] = useState(false)
   const [moveBackward, setMoveBackward] = useState(false)
@@ -121,7 +121,21 @@ export default function Gallery({handleLock}) {
     controls.current.moveRight( - velocity.x * delta );
 		controls.current.moveForward( - velocity.z * delta );
 
+
   })
+
+  useEffect(()=>{
+    if (controls.current) {
+      controls.current.addEventListener('lock', () => {
+        console.log('lock');
+        updateLocked(true)
+      });
+      controls.current.addEventListener('unlock', () => {
+        console.log('unlock')
+        updateLocked(false)
+      });
+    }
+  }, [controls])
 
   useEffect(()=>{
 
@@ -198,8 +212,18 @@ export default function Gallery({handleLock}) {
               <Art key={idx} number={idx} url={item.url}/>
           ))}
       </Suspense> */}
-      <PointerLockControls
-           ref={controls} />
+      <PointerLockControls onUpdate={() => {
+            // if (controls.current) {
+            //   if(controls.current.isLocked){
+            //     updateLocked(true)
+            //     console.log('lock');
+            //   } else {
+            //     updateLocked(false)
+            //     console.log('unlock');
+            //   }
+            // }
+          }}
+          ref={controls} />
       {/* <OrbitControls  /> */}
     </>
   )
