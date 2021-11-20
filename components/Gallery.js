@@ -1,77 +1,41 @@
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, FirstPersonControls, PointerLockControls, Image, Box as NativeBox, useTexture, Plane, PerspectiveCamera, Sky } from '@react-three/drei'
-
+import {useFrame } from '@react-three/fiber'
+import {PointerLockControls, Plane, Sky } from '@react-three/drei'
+// import pictures from '../data/artData'
 import * as THREE from 'three'
-import Art from './Art'
-import RoomSegment from './RoomSegment'
-import { Suspense, useState, useEffect, useRef } from 'react'
 
-export default function Gallery({updateLocked}) {
+import RoomSegment from './RoomSegment'
+import { useState, useEffect, useRef } from 'react'
+
+export default function Gallery({updateLocked, handleArtClick, popupState, artData}) {
 
   const [moveForward, setMoveForward] = useState(false)
   const [moveBackward, setMoveBackward] = useState(false)
   const [moveLeft, setMoveLeft] = useState(false)
   const [moveRight, setMoveRight] = useState(false)
 
+  const isPopupOpen = popupState
+
+  useEffect(()=>{
+    if(isPopupOpen){
+      controls.current.unlock()
+    }
+  }, [isPopupOpen])
+
   const controls = useRef()
 
   const velocity = new THREE.Vector3();
 	const direction = new THREE.Vector3();
 
-  const pictures = [
-    {url: '/IMG_5322.JPG'},
-    {url: '/IMG_5323.JPG'},
-    {url: '/IMG_5324.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5322.JPG'},
-    {url: '/IMG_5323.JPG'},
-    {url: '/IMG_5324.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5322.JPG'},
-    {url: '/IMG_5323.JPG'},
-    {url: '/IMG_5324.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5322.JPG'},
-    {url: '/IMG_5323.JPG'},
-    {url: '/IMG_5324.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5322.JPG'},
-    {url: '/IMG_5323.JPG'},
-    {url: '/IMG_5324.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-    {url: '/IMG_5325.JPG'},
-
-    
-  ]
-
   const roomSize = 6
 
   const rooms = []
 
-  for (let i = 0; i < pictures.length; i += roomSize){
-    rooms.push(pictures.slice(i, i + roomSize));
+  for (let i = 0; i < artData.length; i += roomSize){
+    rooms.push(artData.slice(i, i + roomSize));
   }
 
 
   useFrame((state, delta) => {
-
-    // controls.current.addEventListener('lock', () => {
-    //   console.log('lock');
-    //   handleLock(true)
-    // });
-    // controls.current.addEventListener('unlock', () => {
-    //   console.log('unlock')
-    //   handleLock(false);
-    // });
 
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
@@ -115,12 +79,8 @@ export default function Gallery({updateLocked}) {
       checkForCollision("x", 270)
     } 
 
-    // if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
-		// if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
-
     controls.current.moveRight( - velocity.x * delta );
 		controls.current.moveForward( - velocity.z * delta );
-
 
   })
 
@@ -182,15 +142,6 @@ export default function Gallery({updateLocked}) {
 
       <ambientLight intensity={2} />
       <pointLight position={[40, 40, 40]} />
-      {/* <NativeBox
-          args={[100, 20, 4]}
-          position={[0,0,0]}
-          >
-          <meshStandardMaterial
-              attach="material"
-              color={'#2b6c76'}
-          />
-      </NativeBox> */}
 
       <Plane position={[0,-12.5,0]} rotation={[-Math.PI / 2,0,0]} args={[2000, 2000, 1, 1]}>
         <meshStandardMaterial
@@ -201,30 +152,11 @@ export default function Gallery({updateLocked}) {
 
 
       {rooms.map((room, idx) => (
-        <RoomSegment pictures={room} number={idx}/>
+        <RoomSegment pictures={room} number={idx} handleArtClick={handleArtClick}  />
       ))}
 
-      
-      
+      <PointerLockControls ref={controls} />
 
-      {/* <Suspense fallback={null}>
-          {pictures.map((item, idx) =>(
-              <Art key={idx} number={idx} url={item.url}/>
-          ))}
-      </Suspense> */}
-      <PointerLockControls onUpdate={() => {
-            // if (controls.current) {
-            //   if(controls.current.isLocked){
-            //     updateLocked(true)
-            //     console.log('lock');
-            //   } else {
-            //     updateLocked(false)
-            //     console.log('unlock');
-            //   }
-            // }
-          }}
-          ref={controls} />
-      {/* <OrbitControls  /> */}
     </>
   )
 }

@@ -2,11 +2,9 @@ import { Box as NativeBox } from '@react-three/drei'
 
 import Art from './Art'
 
-import * as THREE from 'three'
+import { Suspense } from 'react'
 
-import { Suspense, useState, useEffect, useRef } from 'react'
-
-export default ({number, pictures}) => {
+export default ({number, pictures, handleArtClick }) => {
 
     const length = 75
     const gap = 20
@@ -27,14 +25,12 @@ export default ({number, pictures}) => {
   
     ]
 
-
-
     return (
         <>
         <group position={[0,0, number * 55]}>
             <Suspense fallback={null}>
             {pictures.map((picture, idx) => (
-                <Art key={idx} vectors={artPositions[idx]} number={idx} url={picture.url}/>
+                <Art key={idx} vectors={artPositions[idx]} number={idx} picture={picture} handleArtClick={handleArtClick} />
             ))}
              </Suspense> 
             <NativeBox
