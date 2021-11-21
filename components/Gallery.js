@@ -152,7 +152,7 @@ export default function Gallery({updateLocked, handleArtClick, popupState, artDa
 
 
       {rooms.map((room, idx) => (
-        <RoomSegment pictures={room} number={idx} handleArtClick={handleArtClick}  />
+        <RoomSegment key={idx} pictures={room} number={idx} handleArtClick={handleArtClick}  />
       ))}
 
       <PointerLockControls ref={controls} />

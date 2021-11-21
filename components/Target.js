@@ -17,7 +17,7 @@ export default function Target(){
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            opacity: 0.25
+            opacity: 0.1
         }}    
         >
             <div

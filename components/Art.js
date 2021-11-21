@@ -6,21 +6,9 @@ import * as THREE from 'three'
 
 export default function Art({picture, number, vectors, handleArtClick}){
 
-    const {url, title, description} = picture
-    // const {info, setInfo} = useContext(AppContext);
+    const { url } = picture
     const [hover, setHover] = useState(false)
- 
 
-
-
-    const handleClick = () => {
-        setHover(!hover)
-        // setInfo({
-        //     isOpen: !info.isOpen,
-        //     title: "test",
-        //     content: "lorem ipsum"
-        // })
-    }
 
     return(
         <>
@@ -34,7 +22,7 @@ export default function Art({picture, number, vectors, handleArtClick}){
                         color={hover ? 'white' : '#999'}
                     />
                 </NativeBox>
-                <Image  scale={[10,10,1]} position={[0,0,1.1]} url={url} />
+                <Image crossOrigin="anonymous" scale={[10,10,1]} position={[0,0,1.1]} url={url} />
             </group>
 
         </>

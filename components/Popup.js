@@ -22,19 +22,21 @@ export default function Popup({info}){
             onClick={(e)=> e.stopPropagation()}
             
         >
-            <img src={info.url} 
+            <img crossOrigin="anonymous" src={info.url} 
                 style={{
                     width: '50%',
                     height: 'auto'
                 }}
             />
             <div
-            style={{
-                width: '50%',
-                height: 'auto'
-            }}>
+                style={{
+                    width: '50%',
+                    height: 'auto'
+                }}>
                 <h1>{info.title}</h1>
-                <p>{info.content}</p>
+                <div dangerouslySetInnerHTML={{
+                    __html: info.content
+                }} />
             </div>
   
         </div>

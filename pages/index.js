@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Gallery from "../components/Gallery"
-import { Canvas, useFrame,  } from '@react-three/fiber'
-import { Suspense, useState, useEffect, useRef } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { useRef } from 'react'
 import { useAppContext } from '../data/AppContext'
 import Popup from '../components/Popup'
 import Target from '../components/Target'
@@ -39,7 +39,6 @@ export default function IndexPage({data}) {
     )
   }
 
-
   return (
     <>
     <Canvas 
@@ -57,7 +56,7 @@ export default function IndexPage({data}) {
       }} 
       camera={{position: [0, 0, 0], rotation: [0, Math.PI, 0]}} 
     >
-      <Gallery updateLocked={updateLocked} handleArtClick={handleArtClick} popupState={info.isOpen} artData={data.artData}/>
+      <Gallery updateLocked={updateLocked} handleArtClick={handleArtClick} popupState={info.isOpen} artData={data}/>
     </Canvas>
 
     {isLocked.current && (
@@ -74,59 +73,25 @@ export default function IndexPage({data}) {
 
 
 export async function getStaticProps() {
-  // const res = await fetch(`https://.../data`)
-  // const data = await res.json()
+  const res = await fetch(`http://webgl-backend.local/wp-json/wp/v2/posts`)
+  const json = await res.json()
 
-  // if (!data) {
-  //   return {
-  //     notFound: true,
-  //   }
-  // }
-  const data = {
-    artData: [
-    {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-      {
-        url: '/IMG_5322.JPG',
-        title: 'Untitled',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget leo sed magna pulvinar scelerisque quis ac lacus. Nullam eu auctor arcu. Vivamus eu facilisis orci. Cras massa nunc, consequat nec egestas non, maximus in massa. Proin a dictum sem, id tempor leo. Phasellus a bibendum dolor. Ut gravida rhoncus risus, ut aliquam odio dapibus id. Aliquam at semper neque. Vivamus quis neque a velit commodo iaculis vitae quis leo.',
-      },
-  
-    ]
-  }
+  const imageReq = await fetch(`http://webgl-backend.local/wp-json/wp/v2/media`)
+  const imageJson = await imageReq.json()
+
+
+  const data = json.map((post) => {
+
+    const image = imageJson.filter(item =>{
+      return item.id === post.featured_media
+    })
+
+    return {
+      url: `/uploads/${image[0]['media_details'].file}`,
+      title: post.title.rendered,
+      description: post.content.rendered
+    }
+  })
 
   return {
     props: {
